@@ -42,7 +42,40 @@
         border-radius: 5px;
         padding: 20px;
         margin-top: 20px;
-        text-indent: 20px
+      }
+      .form-group {
+        padding: 5px;
+        margin-bottom: 5px;
+      }
+      .form-group:before,.form-group:after{
+        content:" ";
+        width: 0;
+        height: 0;
+        display: block;
+        clear:both;
+      }
+      .form-label {
+        float: left;
+        width: 120px;
+        text-align: left;
+        padding: 5px;
+      }
+      .form-input {
+        padding: 5px;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        min-width: 180px;
+      }
+      .form-input-name{
+        margin-right: 5px;
+      }
+      .form-input-btn{
+        min-width: inherit;
+        padding: 5px 15px;
+        background-color: #f1f1f1;
+      }
+      .form-input-btn:hover{
+        background-color: #f9f9f9;
       }
     </style>
   </head>
@@ -65,7 +98,7 @@
             <h2 className="commentAuthor">
               {this.props.author}
             </h2>
-            <div className ="commentContent">{this.props.children.toString()}</div>
+            <div className ="commentContent">{this.props.children}</div>
           </div>
           )
       }
@@ -74,7 +107,7 @@
     var CommentList = React.createClass({
       render : function(){
         var comments = this.props.data.map(function(comment){
-          return (<Comment author={comment.author}>{comment.content}</Comment>);
+          return (<Comment author={comment.author}>{comment.comment}</Comment>);
         });
         return ( <div className="commentList">
                   {comments}
@@ -82,24 +115,44 @@
       }
     });
     var CommentForm = React.createClass({
+      handleSubmit : function(e){
+        e.preventDefault();
+        this.props.handleSubmit({
+              author:this.refs.author.getDOMNode().value,
+              comment:this.refs.comment.getDOMNode().value,
+              save:true
+            });
+      },
       render : function(){
         return (<div className="commentForm">
-            <form className="commentForm" action="http://localhost:8081/demo/Demo" method="get">
-            username : <input type="text" name="username" placeholder="input your name" />
-            comment : <textarea name="comment" placeholder="something to say ! May be !!" ></textarea>
-            <input type="submit" value="gogogo"/>
-            </form>
-          </div> );
+                  <form className="commentForm" onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <div className="form-label"><label className="form-input-name">评论人</label><label className="form-sep">：</label></div>
+                        <input className="form-input" type="text" ref="author" placeholder="input your name" />
+                    </div>
+                    <div className="form-group">
+                      <div className="form-label"><label className="form-input-name">评论</label><label className="form-sep">：</label></div>
+                      <textarea className="form-input form-textarea" ref="comment" placeholder="something to say ! May be !!" ></textarea>
+                    </div>  
+                    <div className="form-group">
+                      <div className="form-label"><label className="form-input-name"><input className="form-input form-input-btn" type="submit" value="gogogo"/></label></div>
+                    </div>
+                  </form>
+                </div> );
       }
     })
 
     var CommentBox = React.createClass({
-      loadDataFromServer : function(){
+      handleSubmit : function(comment){
+        this.loadDataFromServer(comment);
+      },
+      loadDataFromServer : function(data){
         var self = this;
         $.ajax({
           url:self.props['data-url'],
           dataType : "jsonp",
           // jsonpCallback : "phoeon" ,
+          data : data||{},
           jsonp : "callback",
           cache : false
         }).done(function(data){ 
@@ -118,14 +171,14 @@
       },
       render : function(){
         return (<div className="commentBox">
-                  <h1>Comments</h1>
-                  <CommentList data={this.state.data}/>
-                  <CommentForm/>
+                    <h1>Comments</h1>
+                    <CommentList data={this.state.data}/>
+                    <CommentForm handleSubmit={this.handleSubmit.bind(this)}/>
                 </div>);
       }
     })
     // console.log(CommentBox)
-    React.render(<CommentBox pollInterval={4000} data-url='http://localhost:8081/demo/Demo'/>,document.querySelector("#example"));
+    React.render(<CommentBox pollInterval={4000} data-url='http://localhost:8081/demo/ServerSide'/>,document.querySelector("#example"));
     </script>
   </body>
 </html>
