@@ -13,68 +13,95 @@
         border: 1px solid #ccc;
         border-radius: 5px;
       }
-      .commentList{
+      .commentBox .comment-box-title{
+        text-align: center;
+      }
+      .commentBox .commentList{
         background-color: #fff;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
       }
-      .comment{
+      .commentBox .no-data-tip {
+        text-indent: 20px;
+        font-weight: bold;
+      }
+      .commentBox .comment{
         border-radius: 10px;
         padding: 10px;
         border-bottom: 1px solid #ccc;
         border-top: 1px solid #ccc;
         margin-top: 10px;
       }
-      .comment:hover{
+      .commentBox .comment:hover{
         background-color: #f8f8f8;
       }
-      .commentAuthor{
+      .commentBox .commentAuthor{
         text-indent: 20px;
+        border-bottom: 1px solid #f1f1f1;
       }
-      .commentContent{
+      .commentBox .commentContent{
         text-indent: 20px;
-        color:#666;
+        color: #666;
+        padding-left: 20px;
+        font-size: 12px;
+        line-height: 20px;
       }
-      .commentForm{
+      .commentBox .commentForm{
         background: #fefefe;
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 20px;
         margin-top: 20px;
       }
-      .form-group {
+
+      .commentBox .form-group {
         padding: 5px;
         margin-bottom: 5px;
       }
-      .form-group:before,.form-group:after{
+      .commentBox .form-group:before,
+      .commentBox .form-group:after{
         content:" ";
         width: 0;
         height: 0;
         display: block;
         clear:both;
       }
-      .form-label {
+      .commentBox .form-title {
+        text-indent: 5px;
+        font-weight: bold;
+        color: #666;
+      }
+      .commentBox .form-label {
         float: left;
         width: 120px;
         text-align: left;
         padding: 5px;
       }
-      .form-input {
+      .commentBox .form-input {
         padding: 5px;
         border: 1px solid #aaa;
         border-radius: 3px;
-        min-width: 180px;
+        min-width:  calc(100% - 150px);
       }
-      .form-input-name{
+      .commentBox .form-textarea{
+        resize : none;
+      }
+      .commentBox .form-input:focus{
+        outline: none;
+        border-color:#69f;
+        box-shadow: 0px 0px 5px 0px #69f;
+      }
+      .commentBox .form-input-name{
         margin-right: 5px;
       }
-      .form-input-btn{
+      .commentBox .form-input-btn{
+        box-shadow: 0 0 0 0 transparent;
         min-width: inherit;
-        padding: 5px 15px;
+        padding: 5px 35px;
         background-color: #f1f1f1;
       }
-      .form-input-btn:hover{
+      .commentBox .form-input-btn:hover{
         background-color: #f9f9f9;
       }
     </style>
@@ -108,7 +135,10 @@
       render : function(){
         var comments = this.props.data.map(function(comment){
           return (<Comment author={comment.author}>{comment.comment}</Comment>);
-        });
+        }) ;
+        if(this.props.data.length==0){
+          comments = <div className="no-data-tip">暂无评论，快来抢沙发！！！</div> ;
+        }
         return ( <div className="commentList">
                   {comments}
           </div> );
@@ -122,10 +152,15 @@
               comment:this.refs.comment.getDOMNode().value,
               save:true
             });
+        this.refs.author.getDOMNode().value = 
+        this.refs.comment.getDOMNode().value = null;
       },
       render : function(){
         return (<div className="commentForm">
                   <form className="commentForm" onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                      <div className="form-title"><label className="">说点什么吧。。。</label></div>
+                    </div>
                     <div className="form-group">
                         <div className="form-label"><label className="form-input-name">评论人</label><label className="form-sep">：</label></div>
                         <input className="form-input" type="text" ref="author" placeholder="input your name" />
@@ -135,7 +170,7 @@
                       <textarea className="form-input form-textarea" ref="comment" placeholder="something to say ! May be !!" ></textarea>
                     </div>  
                     <div className="form-group">
-                      <div className="form-label"><label className="form-input-name"><input className="form-input form-input-btn" type="submit" value="gogogo"/></label></div>
+                      <div className="form-label"><label className="form-input-name"><input className="form-input form-input-btn" type="submit" value="发表"/></label></div>
                     </div>
                   </form>
                 </div> );
@@ -163,15 +198,18 @@
         })
       },
       getInitialState : function(){
+        console.log("getInitialState")
         return {data: []};
       },
       componentDidMount : function(){
+        console.log("componentDidMount")
         this.loadDataFromServer();
         setInterval(this.loadDataFromServer,parseInt(this.props.pollInterval));
       },
       render : function(){
+        console.log("render")
         return (<div className="commentBox">
-                    <h1>Comments</h1>
+                    <h1 className="comment-box-title">评论</h1>
                     <CommentList data={this.state.data}/>
                     <CommentForm handleSubmit={this.handleSubmit.bind(this)}/>
                 </div>);
