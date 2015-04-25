@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+    <script src="jquery.js"></script>
+</head>
+<body>
+	<script type="text/jsx">
+	 var ExampleApplication = React.createClass({
+        getDefaultProps : function(){
+          return {
+            start   :  new Date().getTime()
+          }
+        },
+        getInitialState : function(){
+          return {
+            elapsed :　1
+          };
+        },
+        componentDidMount : function(){
+          var self = this;
+          setInterval(function(){
+            self.setState({
+              elapsed :　new Date().getTime() - self.props.start
+            })
+          },50)
+        },
+        render: function() {
+          var elapsed = Math.round(this.state.elapsed  / 100);
+          var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0' );
+          var message =
+            'React has been successfully running for ' + seconds + ' seconds.';
+
+          return React.DOM.p(null, message);
+        }
+      });
+
+      React.render(
+        <ExampleApplication/> ,
+        document.body
+      );
+	// React.render(<aBc/>,document.body);
+	</script>
+</body>
+</html>
