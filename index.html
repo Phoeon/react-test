@@ -123,9 +123,9 @@
         return (
           <div className="comment">
             <h2 className="commentAuthor">
-              {this.props.author}
+              {decodeURIComponent(this.props.author)}
             </h2>
-            <div className ="commentContent">{this.props.children}</div>
+            <div className ="commentContent">{decodeURIComponent(this.props.children)}</div>
           </div>
           )
       }
@@ -216,7 +216,10 @@
       }
     })
     // console.log(CommentBox)
-    React.render(<CommentBox pollInterval={4000} data-url='http://localhost:8081/demo/ServerSide'/>,document.querySelector("#example"));
+    // http://localhost:8081/abc?a=1
+    // var url = "http://localhost:8081/demo/ServerSide" ;
+    var url = "http://localhost:8081";
+    React.render(<CommentBox pollInterval={4000} data-url={url}/>,document.querySelector("#example"));
     </script>
   </body>
 </html>
