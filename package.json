@@ -19,7 +19,7 @@
      "watchify": "^2.1.1" 
    }, 
    "scripts": { 
-     "start": "watchify -o js/bundle.js -v -d js/app.js", 
+     "start": "watchify -o app/bundle.js -v -d app/app.js", 
      "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > js/bundle.min.js"
    }, 
    "author": "Bill Fisher", 
