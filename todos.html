@@ -9,7 +9,7 @@
 		}
 		.todos-zone{
 			margin: auto;
-			width: 500px;
+			width: 302px;
 			border: 1px solid #ccc;
 			border-radius: 5px;
 			padding: 5px;
@@ -94,12 +94,56 @@
 			border: 1px solid #ccc;
 			border-radius: 3px;
 			line-height: 30px;
+			cursor:pointer;
 		}
-		.todos-item:focus{
+		.todos-done{
+			text-decoration: line-through;
+			color:#666;
+		}
+		.todos-item:hover .todos-del-btn{
+			display: block;
+		}
+		.todos-del-btn {
+			position: absolute;
+			top: 5px;
+			right: 10px;
+			width: 20px;
+			font-size: 12px;
+			display: none;
+			height: 20px;
+			text-align: center;
+			line-height: 20px;
+			background-color: #000;
+			border-radius: 10px;
+			color: #fff;
+			opacity: 0.3;
+			font-weight: bold;
+		}
+		.todos-del-btn:hover{
+			opacity: 1;
+			cusor:pointer;
+		}
+		.todos-item.edit{
+			border: none;
+			border-radius: 0;
+		}
+		.todos-item .todos-input{
+			display: none;
+		}
+		.todos-item.edit .todos-input{
+			display: block;
+			margin:0;
+			width: 100%;
+		}
+		.todos-item.edit .todos-check-single,
+		.todos-item.edit .todos-content{
+			display: none;
+		}
+		/*.todos-item:focus{
 			box-shadow: 0px 0px 5px 0px #69f;
 			outline: none;
 			border-color: #69f;
-		}
+		}*/
 		.todos-check-single{
 
 		}
@@ -118,8 +162,21 @@
 		.right-zone{
 			right: 30px;
 			position: absolute;
-			height: 40px;
-			line-height: 40px;
+			height: 26px;
+			line-height: 26px;
+			top: 7px;
+			display: none;
+			background-color: #f1f1f1;
+			padding: 0 10px;
+			border-radius: 3px;
+			border: 1px solid #ccc;
+			cursor: pointer;
+		}
+		.has-done{
+			display: block;
+		}
+		.has-done:hover{
+			background-color: #fff;
 		}
 	</style>
 </head>
