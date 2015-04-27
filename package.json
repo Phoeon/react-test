@@ -3,7 +3,7 @@
   "version": "0.0.3", 
   "description": "Example Flux architecture.", 
   "repository": "", 
-  "main": "js/app.js", 
+  "main": "app/app.js", 
   "dependencies": { 
     "flux": "^2.0.1", 
     "keymirror": "~0.1.0", 
