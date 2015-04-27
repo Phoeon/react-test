@@ -11,11 +11,17 @@ module.exports = React.createClass({
 					className="todos-input" type="text" ref="todos-input" placeholder="input something to do 。。。"/>
 				</div>
 				<div className="todos-mark-all-zone">
-					<input className="todos-mark-all" type="checkbox" ref="todos-mark-all" />
-					<label className="mark-all-label">mark all as completed</label>
+					<input checked={this.props.checkAll} onChange={this.changeHandler} id="todos-mark-all" className="todos-mark-all" type="checkbox" ref="todos-mark-all" />
+					<label htmlFor = "todos-mark-all" className="mark-all-label">mark all as completed</label>
 				</div>
 			</div>
 			);
+	},
+	changeHandler : function(e){
+		TodosAction.updataAll({
+			actionType : TodosConstant.UPDATE_ALL_TODO,
+			isDone : e.target.checked
+		})
 	},
 	keyupDownHandler : function(e){
 		if(e.keyCode===13){

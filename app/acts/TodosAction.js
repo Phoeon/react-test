@@ -8,5 +8,11 @@ module.exports = {
 	},
 	update : function(data){
 		AppDispatcher.dispatch(data);	
+	},
+	remove : function(data){
+		AppDispatcher.dispatch(data);
+	},
+	updataAll : function(data){
+		AppDispatcher.dispatch(data);
 	}
 }

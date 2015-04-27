@@ -3,13 +3,7 @@
 	assign = require("object-assign"),
 	TodosConstant = require("../TodosConstants"),
 
-	_todoList = [
-	{
-		isDone : true,
-		id : 1000,
-		content : "nothing to say !!"
-	}
-	];
+	_todoList = [];
 
 var TodosStore = assign({},EventEmitter.prototype,{
 	loadAll : function(){
@@ -20,8 +14,7 @@ var TodosStore = assign({},EventEmitter.prototype,{
 		_todoList.push(data);
 		this.emit(TodosConstant.EVENT_NAME);
 	},
-	update : function(data){
-		debugger
+	update : function(data,stopEvent){
 		_todoList.forEach(function(item){
 			if(item.id === data.id){
 				for(var k in data){
@@ -29,6 +22,18 @@ var TodosStore = assign({},EventEmitter.prototype,{
 				}
 			}
 		})
+		if(!stopEvent)
+		this.emit(TodosConstant.EVENT_NAME);
+	},
+	remove : function(data){
+		var _bk_todoList = [];
+		var params = data.params||(data.params={key:"id",value:data.id});
+		_todoList.forEach(function(item,idx){
+			if(item[params.key] !== params.value){
+				_bk_todoList.push(item);
+			}
+		})
+		_todoList = _bk_todoList;
 		this.emit(TodosConstant.EVENT_NAME);
 	}
 });
@@ -41,6 +46,17 @@ var ActionRoutes = {
 	},
 	update : function(Action){
 		TodosStore[Action.actionType](Action);
+	},
+	remove : function(Action){
+		TodosStore[Action.actionType](Action);
+	},
+	updateAll : function(data){
+		TodosStore.loadAll().forEach(function(item){
+			data.id = item.id ;
+			TodosStore.update(data,true);
+		})
+		TodosStore.emit(TodosConstant.EVENT_NAME);	
+		console.log(_todoList)
 	}
 };
 AppDispatcher.register(function(Action){
